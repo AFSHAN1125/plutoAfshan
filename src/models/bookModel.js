@@ -4,6 +4,7 @@ const bookSchema = new mongoose.Schema( {
     bookName: String, 
     authorName: String, 
     tags: [String],
+    year: Number,
     
     isPublished: Boolean,
     prices: {

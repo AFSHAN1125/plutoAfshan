@@ -4,7 +4,7 @@ const AuthorModel= require("../models/AUTHORMODEL18.js")
 const authorModel = require("../models/AUTHORMODEL18.js")
 const BOOKMODEL18 = require("../models/BOOKMODEL18.js")
 
-//...................................Question-1.................................>>
+//...................................Question-1.>>
 
 const createBook= async function (req, res) {
     let data= req.body

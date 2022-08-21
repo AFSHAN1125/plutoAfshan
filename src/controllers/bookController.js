@@ -1,59 +1,64 @@
-const { count } = require("console")
-const BookModel= require("../models/bookModel")
+const { default: mongoose } = require("mongoose")
+const authorModel = require("../models/authorModel")
+const bookModel= require("../models/bookModel")
+const publisherModel = require("../models/publisherModel")
+//  const mongoose = require('mongoose')
+
 
 const createBook= async function (req, res) {
-    let data= req.body
+    
+    let authorId = req.body.author
+    let publisherId = req.body.publisher
+    let isValid = mongoose.Types.ObjectId.isValid(authorId)
+    let isValid1 = mongoose.Types.ObjectId.isValid(publisherId)
 
-    let savedData= await BookModel.create(data)
-    res.send({msg: savedData})
+    if(isValid === false)
+{
+  return  res.send("invaild id length")
 }
-
-const getBooksData= async function (req, res) {
-    let allBooks= await BookModel.find( {authorName : "HO" } )
-    console.log(allBooks)
-    if (allBooks.length > 0 )  res.send({msg: allBooks, condition: true})
-    else res.send({msg: "No books found" , condition: false})
+else if (isValid1=== false)
+{
+  return  res.send("invaild id length")
 }
+let idForAuthor =await authorModel.findById(authorId)
+let idForPublisher =await publisherModel.findById(publisherId)
+    if(!idForAuthor){
+     res.send("authorId is not present")
+    }else if (!idForPublisher){
+         return res.send("publisherId is not present")
 
+    }else if (!idForAuthor && !idForPublisher){
+         return res.send("author is not present put vaild id")
 
-const updateBooks= async function (req, res) {
-    let data = req.body // {sales: "1200"}
-    // let allBooks= await BookModel.updateMany( 
-    //     { author: "SK"} , //condition
-    //     { $set: data } //update in data
-    //  )
-    let allBooks= await BookModel.findOneAndUpdate( 
-        { authorName: "ABC"} , //condition
-        { $set: data }, //update in data
-        { new: true , upsert: true} ,// new: true - will give you back the updated document // Upsert: it finds and updates the document but if the doc is not found(i.e it does not exist) then it creates a new document i.e UPdate Or inSERT  
-     )
-     
-     res.send( { msg: allBooks})
-}
-
-const deleteBooks= async function (req, res) {
-    // let data = req.body 
-    let allBooks= await BookModel.updateMany( 
-        { authorName: "FI"} , //condition
-        { $set: {isDeleted: true} }, //update in data
-        { new: true } ,
-     )
-     
-     res.send( { msg: allBooks})
+    }else{ 
+         let databook = await bookModel.create(req.body )
+         res.send({data : databook})
+    }
 }
 
 
 
+const getBooksData = async function (req, res) {
+    
+    let books =  await bookModel.find().populate('author').populate('publisher')    
+   res.send({ data: books })
+}
 
-// CRUD OPERATIONS:
-// CREATE
-// READ
-// UPDATE
-// DELETE
+const getBooksWithAuthorDetails = async function (req, res) {
+   
+     let data =   await publisherModel.find({name : ["Penguin","HarperCollins"]}).select({_id : 1})
+     let bookid = await bookModel.updateMany({ publisher : data },{ $set : {isHardCover : true , new : true }},{upsert : true})
 
-
-
+     let authorIds = await authorModel.find( { ratings : { $gt : 3.5 }}).select({_id : 1})
+     let rating1 = await bookModel.updateMany({author : authorIds }, { $inc : {price :10 }},{upsert : true})
+  
+     res.send({ data: bookid , rating1})
+}
 module.exports.createBook= createBook
-module.exports.getBooksData= getBooksData
-module.exports.updateBooks= updateBooks
-module.exports.deleteBooks= deleteBooks
+module.exports.getBooksWithAuthorDetails= getBooksWithAuthorDetails
+module.exports.getBooksData=getBooksData
+
+
+
+
+

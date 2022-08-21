@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 
 const bookSchema = new mongoose.Schema( {
-    bookname: {type:String}, 
-    author_id: {type:Number , required:true}, 
-    price: {type:Number},
+    Bookname: {type:String}, 
+    price: Number,
     ratings: {type:Number}
     
     
@@ -12,4 +11,4 @@ const bookSchema = new mongoose.Schema( {
 }, { timestamps: true });
 
 
-module.exports = mongoose.model('Booklibrary', bookSchema)
+module.exports = mongoose.model('NewBooks', bookSchema)

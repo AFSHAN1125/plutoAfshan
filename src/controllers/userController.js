@@ -10,24 +10,14 @@ const basicCode= async function(req, res) {
     console.log( "HEADER DATA ABOVE")
     console.log( "hey man, congrats you have reached the Handler")
     res.send({ msg: "This is coming from controller (handler)"})
-    }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+}
+const assignment = async function(req, res){
+    console.log('this is middlewear')
+    res.send({msg:"Middlewear"})
+}
 
 
 const createUser= async function (req, res) {
@@ -44,3 +34,4 @@ const getUsersData= async function (req, res) {
 module.exports.createUser= createUser
 module.exports.getUsersData= getUsersData
 module.exports.basicCode= basicCode
+module.exports.assignment=assignment

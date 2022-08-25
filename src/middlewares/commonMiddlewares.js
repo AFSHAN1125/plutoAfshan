@@ -1,26 +1,27 @@
+const moment = require('moment')
 
-const mid1= function ( req, res, next) {
-    req.falana= "hi there. i am adding something new to the req object"
-    console.log("Hi I am a middleware named Mid1")
+const date = function ( req, res, next) {
+    
+    let currentDate = moment().format('DD-MM-YYYY' , 'HH:mm:ss');
+    
+    console.log("Current Date : " + currentDate);
     next()
 }
 
-const mid2= function ( req, res, next) {
-    console.log("Hi I am a middleware named Mid2")
+const ip = function ( req, res, next) {
+    
+    let ipAddress = req.ip ;
+    console.log("IP-Address : " + ipAddress)
     next()
 }
 
-const mid3= function ( req, res, next) {
-    console.log("Hi I am a middleware named Mid3")
+const url = function ( req, res, next) {
+    let url = req.originalUrl
+    console.log("URL : " + url)
     next()
 }
+module.exports.date= date
+module.exports.ip = ip
+module.exports.url= url
 
-const mid4= function ( req, res, next) {
-    console.log("Hi I am a middleware named Mid4")
-    next()
-}
 
-module.exports.mid1= mid1
-module.exports.mid2= mid2
-module.exports.mid3= mid3
-module.exports.mid4= mid4

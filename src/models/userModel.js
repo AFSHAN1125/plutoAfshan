@@ -1,6 +1,6 @@
-constmongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-constuserSchema = newmongoose.Schema( {
+const userSchema = new mongoose.Schema( {
     firstName:String,
     lastName:String,
     mobile: {
@@ -18,8 +18,8 @@ constuserSchema = newmongoose.Schema( {
       type :Boolean ,
       default :false
     },
-    age:Number,
+    age:Number
 }, { timestamps:true });
 
-module.exports = mongoose.model('User2', userSchema)
+module.exports = mongoose.model('User3', userSchema)
 

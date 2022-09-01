@@ -1,6 +1,6 @@
-constmongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-constuserSchema = newmongoose.Schema( {
+const userSchema = new mongoose.Schema( {
     firstName:String,
     lastName:String,
     mobile: {

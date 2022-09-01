@@ -1,12 +1,12 @@
-constjwt = require("jsonwebtoken");
-constuserModel = require("../models/userModel");
+const jwt = require("jsonwebtoken");
+const userModel = require("../models/userModel");
 
 //-----------------------------CREATE-USER------------------------------------
 
-constcreateUser = asyncfunction (abcd, xyz) {
+const createUser = async function (abcd, xyz) {
   try{
-     letdata = abcd.body;
-     letsavedData = awaituserModel.create(data);
+     let data = abcd.body;
+     let savedData = await userModel.create(data);
      console.log(abcd.newAtribute);
      xyz.status(201).send({ msg:savedData });
   }catch(err){
@@ -18,19 +18,19 @@ constcreateUser = asyncfunction (abcd, xyz) {
 
 //---------------------------------LOG-IN--------------------------------------
 
-constloginUser = asyncfunction (req, res) {
+const loginUser = async function (req, res) {
   try{
-    letuserName = req.body.emailId;
-    letpassword = req.body.password;
+    let userName = req.body.emailId;
+    let password = req.body.password;
 
-    letuser = awaituserModel.findOne({ emailId:userName, password:password });
+    let user = await userModel.findOne({ emailId:userName, password:password });
     if (!user)
-       returnres.status(404).send({
+       return res.status(404).send({
        status:false,  
        msg:"username or the password is not corerct",
     })
 
-    lettoken = jwt.sign(
+    let token = jwt.sign(
       {
         userId:user._id.toString(),
         batch:"plutonium",
@@ -49,13 +49,13 @@ constloginUser = asyncfunction (req, res) {
 }
 // --------------------------GET-USER-DATA-----------------------------------------
 
-constgetUserData = asyncfunction (req, res) {
+const getUserData = async function (req, res) {
    try{
-    letuserId = req.params.userId;
-    letuserDetails = awaituserModel.findById(userId);
+    let userId = req.params.userId;
+    let userDetails = awaituserModel.findById(userId);
     
     if (!userDetails)     
-      returnres.status(404).send({ status:false, msg:"No User found" });
+      return res.status(404).send({ status:false, msg:"No User found" });
   
     res.status(404).send({ status:true, data:userDetails });
    }catch(err){
@@ -67,20 +67,20 @@ constgetUserData = asyncfunction (req, res) {
 
 // --------------------------------UPDATE USER-----------------------------------------
 
-constupdateUser = asyncfunction (req, res) {
+const updateUser = async function (req, res) {
   
   try{
-    letuserId = req.params.userId;
+    let userId = req.params.userId;
 
-    letuser = awaituserModel.findById(userId);
+    let user = awaituserModel.findById(userId);
   
     //Return an error if no user with the given id exists in the db
     if (!user) {
-      returnres.status(404).send("No such user exists");
+      return res.status(404).send("No such user exists");
     }
     
-    letuserData = req.body;
-    letupdatedUser = awaituserModel.findOneAndUpdate({ _id:userId }, userData);
+    let userData = req.body;
+    let updatedUser = await userModel.findOneAndUpdate({ _id:userId }, userData);
     res.send({ status:true, data:updatedUser });
   }catch(err){
     console.log("There is an error : " , err.message)
@@ -91,14 +91,14 @@ constupdateUser = asyncfunction (req, res) {
  
 //--------------------------------POST MESSAGE-------------------------------
 
-constpostMessage = asyncfunction(req , res){
+const postMessage = async function(req , res){
  
   try{
-    letmessage = req.body.message
+    let message = req.body.message
 
-  letuserId = req.params.userId;
+  let userId = req.params.userId;
 
-  letuser = awaituserModel.findById(userId);
+  let user = awaituserModel.findById(userId);
 
   //Return an error if no user with the given id exists in the db
   if (!user) {
@@ -107,13 +107,13 @@ constpostMessage = asyncfunction(req , res){
   
   // adding the post to valid usrer
 
-  letupdatedPost = user.posts
+  let updatedPost = user.posts
 
   updatedPost.push(message)
 
-  letupdatedUser = awaituserModel.findOneAndUpdate({_id :userId} , {posts :updatedPost} , {new :true})
+  let updatedUser = await userModel.findOneAndUpdate({_id :userId} , {posts :updatedPost} , {new :true})
 
-  returnres.send({status :true , data :updatedUser})
+  return res.send({status :true , data :updatedUser})
 
   }catch(err){
     console.log("There is an error : " , err.message)
@@ -123,21 +123,21 @@ constpostMessage = asyncfunction(req , res){
 }
 // --------------------------------DELETED USER------------------------------
 
-constdeleteUser = asyncfunction(req , res){
+const deleteUser = async function(req , res){
  try{
-  letuserId = req.params.userId;
+  let userId = req.params.userId;
 
-  letuser = awaituserModel.findById(userId);
+  let user = awaituserModel.findById(userId);
 
   if (!user) {
-    returnres.send("No such user exists");
+    return res.send("No such user exists");
   }  
-    letnewData = user.isDeleted.toString() 
+    let newData = user.isDeleted.toString() 
 
     if(newData == "false"){
-        returnres.send("Can not delete")
+        return res.send("Can not delete")
     }else{  
-        letupdatedUser = awaituserModel.findByIdAndUpdate({_id :userId})
+        let updatedUser = await userModel.findByIdAndUpdate({_id :userId})
         res.send({status :true , msg :updatedUser})
     }
  }catch(err){

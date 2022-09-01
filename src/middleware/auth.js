@@ -1,5 +1,5 @@
-constjwt = require("jsonwebtoken");
-constuserModel = require("../models/userModel");
+const jwt = require("jsonwebtoken");
+const userModel = require("../models/userModel");
 
 // const token = asyncfunction(req , res){
 // try {
@@ -11,16 +11,16 @@ constuserModel = require("../models/userModel");
 // }
 // }
 
-constauthenticate = function(req, res, next) {
+const authenticate = function(req, res, next) {
   try{
      
-    lettoken = req.headers['x-auth-token']
+    let token = req.headers['x-auth-token']
 
     console.log(token)
 
-    if(!token) returnres.send({status :false , msg :"token is not present"})
+    if(!token) return res.send({status :false , msg :"token is not present"})
 
-    letdecodedToken = jwt.verify(token , 'functionup-plutonium-very-very-secret-key')
+    let decodedToken = jwt.verify(token , 'functionup-plutonium-very-very-secret-key')
 
     if(!decodedToken) returnres.send({status :false , msg :"token is not valid"})
 
@@ -33,22 +33,22 @@ constauthenticate = function(req, res, next) {
     
 }   
 
-constauthorise = function(req, res, next) {
+const authorise = function(req, res, next) {
     
   try{
     
-  lettoken = req.headers['x-auth-token']
+  let token = req.headers['x-auth-token']
 
   if(!token) returnres.send({status :false , msg :"token is not present"})
 
     
-  letdecodedToken = jwt.verify(token , 'functionup-plutonium-very-very-secret-key')
+  let decodedToken = jwt.verify(token , 'functionup-plutonium-very-very-secret-key')
 
   if(!decodedToken) returnres.send({status :false , msg :"token is not valid"})
 
-  letuserToBeModified = req.params.userId
+  let userToBeModified = req.params.userId
 
-  letuserLoggedIn = decodedToken.userId
+  let userLoggedIn = decodedToken.userId
 
   //checking if the logged-in user has only posted not others are allowed
 

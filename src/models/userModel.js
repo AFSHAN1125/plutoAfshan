@@ -1,21 +1,26 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema( {
-    firstName: String,
-    lastName: String,
+    firstName:String,
+    lastName:String,
     mobile: {
-        type: String,
+        type:String,
 
-        required: true
+        required:true
     },
-    emailId: String,
-    password: String,
+    emailId:String,
+    password:String,
     gender: {
-        type: String,
+        type:String,
         enum: ["male", "female", "other"]
     },
-    age: Number,
+    isDeleted : {
+        type :Boolean , 
+        default :false
+    },
+    age:Number,
     posts: {type: [], deafult: []}
-}, { timestamps: true });
 
-module.exports = mongoose.model('User', userSchema)
+}, { timestamps:true });   
+   
+module.exports = mongoose.model('User3', userSchema)

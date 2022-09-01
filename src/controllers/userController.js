@@ -1,138 +1,149 @@
-const jwt = require("jsonwebtoken");
-const userModel = require("../models/userModel");
+constjwt = require("jsonwebtoken");
+constuserModel = require("../models/userModel");
 
-// entering the user
+//-----------------------------CREATE-USER------------------------------------
 
-const createUser = async function (abcd, xyz) {
-  //You can name the req, res objects anything.
-  //but the first parameter is always the request 
-  //the second parameter is always the response
-  let data = abcd.body;
-  let savedData = await userModel.create(data);
-  console.log(abcd.newAtribute);
-  xyz.send({ msg:savedData });
+constcreateUser = asyncfunction (abcd, xyz) {
+  try{
+     letdata = abcd.body;
+     letsavedData = awaituserModel.create(data);
+     console.log(abcd.newAtribute);
+     xyz.status(201).send({ msg:savedData });
+  }catch(err){
+    console.log("This is an Error : " , err.message)
+    res.status(500).send({msg :"SERVER ERROR" , error :err.message})
+  }
+  
 };   
 
 //---------------------------------LOG-IN--------------------------------------
 
-const loginUser = async function (req, res) {
-  let userName = req.body.emailId;
-  let password = req.body.password;
+constloginUser = asyncfunction (req, res) {
+  try{
+    letuserName = req.body.emailId;
+    letpassword = req.body.password;
 
-  let user = await userModel.findOne({ emailId:userName, password:password });
-  if (!user)
-    return res.send({
-      status:false,  
-      msg:"username or the password is not corerct",
-    });  
-    
-// --------------------------------TOKEN----------------------------------------------
+    letuser = awaituserModel.findOne({ emailId:userName, password:password });
+    if (!user)
+       returnres.status(404).send({
+       status:false,  
+       msg:"username or the password is not corerct",
+    })
 
-  // Once the login is successful, create the jwt token with sign function
-  // Sign function has 2 inputs:
-  // Input 1 is the payload or the object containing data to be set in token
-  // The decision about what data to put in token depends on the business requirement
-  // Input 2 is the secret (This is basically a fixed value only set at the server. This value should be hard to guess)
-  // The same secret will be used to decode tokens 
+    lettoken = jwt.sign(
+      {
+        userId:user._id.toString(),
+        batch:"plutonium",
+        organisation:"FunctionUp",
+      },
+      "functionup-plutonium-very-very-secret-key"
+    );
+    console.log(token)
+    res.setHeader("x-auth-token", token);
+    res.status(201).send({ status:true, token:token });
   
-  let token = jwt.sign(
-    {
-      userId:user._id.toString(),
-      batch:"plutonium",
-      organisation:"FunctionUp",
-    },
-    "functionup-plutonium-very-very-secret-key"
-  );
-  res.setHeader("x-auth-token", token);
-  res.send({ status:true, token:token });
-};
-
+  }catch(err){
+    console.log("There is an error : " , err.message)
+    res.status(500).send({msg :"SERVER ERROR ", error :err.message})
+  }
+}
 // --------------------------GET-USER-DATA-----------------------------------------
 
-const getUserData = async function (req, res) {
-   
-  let userId = req.params.userId;
-  let userDetails = await userModel.findById(userId);
-  if (!userDetails)     
-    return res.send({ status:false, msg:"No such user exists" });
-
-  res.send({ status:true, data:userDetails });
-  // Note: Try to see what happens if we change the secret while decoding the token
+constgetUserData = asyncfunction (req, res) {
+   try{
+    letuserId = req.params.userId;
+    letuserDetails = awaituserModel.findById(userId);
+    
+    if (!userDetails)     
+      returnres.status(404).send({ status:false, msg:"No User found" });
+  
+    res.status(404).send({ status:true, data:userDetails });
+   }catch(err){
+    console.log("There is an error : " , err.message)
+    res.status(500).send({msg :"SERVER ERROR ", error :err.message})
+   }
+  
 };
 
 // --------------------------------UPDATE USER-----------------------------------------
 
-const updateUser = async function (req, res) {
-  // Do the same steps here:
-  // Check if the token is present
-  // Check if the token present is a valid token
-  // Return a different error message in both these cases
-
-  let userId = req.params.userId;
-
-  let user = await userModel.findById(userId);
-
-  //Return an error if no user with the given id exists in the db
-  if (!user) {
-    return res.send("No such user exists");
-  }
+constupdateUser = asyncfunction (req, res) {
   
-  let userData = req.body;
-  let updatedUser = await userModel.findOneAndUpdate({ _id:userId }, userData);
-  res.send({ status:true, data:updatedUser });
-};
+  try{
+    letuserId = req.params.userId;
 
+    letuser = awaituserModel.findById(userId);
+  
+    //Return an error if no user with the given id exists in the db
+    if (!user) {
+      returnres.status(404).send("No such user exists");
+    }
+    
+    letuserData = req.body;
+    letupdatedUser = awaituserModel.findOneAndUpdate({ _id:userId }, userData);
+    res.send({ status:true, data:updatedUser });
+  }catch(err){
+    console.log("There is an error : " , err.message)
+    res.status(500).send({msg :"SERVER ERROR ", error :err.message})
+   }
+  
+  }
+ 
 //--------------------------------POST MESSAGE-------------------------------
 
-const postMessage = async function(req , res){
-  let message = req.body.message
+constpostMessage = asyncfunction(req , res){
+ 
+  try{
+    letmessage = req.body.message
 
-  //check if token is present
-  //check if the token is valid
+  letuserId = req.params.userId;
 
-  let userId = req.params.userId;
-
-  let user = await userModel.findById(userId);
+  letuser = awaituserModel.findById(userId);
 
   //Return an error if no user with the given id exists in the db
   if (!user) {
-    return res.send("No such user exists");
+    returnres.status(404).send("No such user exists");
   }
   
   // adding the post to valid usrer
-  let updatedPost = user.posts
+
+  letupdatedPost = user.posts
 
   updatedPost.push(message)
 
-  let updatedUser = await userModel.findOneAndUpdate({_id :userId} , {posts :updatedPost} , {new :true})
+  letupdatedUser = awaituserModel.findOneAndUpdate({_id :userId} , {posts :updatedPost} , {new :true})
 
-  // returning the updated message
+  returnres.send({status :true , data :updatedUser})
 
-  return res.send({status :true , data :updatedUser})
+  }catch(err){
+    console.log("There is an error : " , err.message)
+    res.status(500).send({msg :"SERVER ERROR ", error :err.message})
+   }
+  
 }
 // --------------------------------DELETED USER------------------------------
 
-const deleteUser = async function(req , res){
-    
-  //check if token is present
-  //check if the token is valid
-  let userId = req.params.userId;
+constdeleteUser = asyncfunction(req , res){
+ try{
+  letuserId = req.params.userId;
 
-  let user = await userModel.findById(userId);
+  letuser = awaituserModel.findById(userId);
 
-  //Return an error if no user with the given id exists in the db
   if (!user) {
-    return res.send("No such user exists");
+    returnres.send("No such user exists");
   }  
-    let newData = user.isDeleted.toString() 
+    letnewData = user.isDeleted.toString() 
 
     if(newData == "false"){
-        return res.send("Can not delete")
+        returnres.send("Can not delete")
     }else{  
-        let updatedUser = await userModel.findByIdAndUpdate({_id :userId})
+        letupdatedUser = awaituserModel.findByIdAndUpdate({_id :userId})
         res.send({status :true , msg :updatedUser})
     }
-
+ }catch(err){
+  console.log("There is an error : " , err.message)
+  res.status(500).send({msg :"SERVER ERROR ", error :err.message})
+ }
 }
 
 module.exports.createUser = createUser;
@@ -141,4 +152,3 @@ module.exports.updateUser = updateUser;
 module.exports.loginUser = loginUser;
 module.exports.postMessage = postMessage
 module.exports.deleteUser = deleteUser
-

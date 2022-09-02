@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-mongoose.connect("mongodb+srv://Afshan-Auth-2:CTJmINoi8uaUXeRX@cluster0.drhptc9.mongodb.net/AFSHA-DB?retryWrites=true&w=majority",{
+mongoose.connect("mongodb+srv://Afshan1125:CTJmINoi8uaUXeRX@cluster0.drhptc9.mongodb.net/AFSHA-Cowin?retryWrites=true&w=majority",{
     useNewUrlParser: true
 }) 
 .then( () => console.log("MongoDb is connected"))
@@ -17,6 +17,6 @@ mongoose.connect("mongodb+srv://Afshan-Auth-2:CTJmINoi8uaUXeRX@cluster0.drhptc9.
 app.use('/', route)
 
 
-app.listen(process.env.PORT || 3000, function () {
-    console.log('Express app running on port ' + (process.env.PORT || 3000))
+app.listen(process.env.PORT || 3001, function () {
+    console.log('Express app running on port ' + (process.env.PORT || 3001))
 });

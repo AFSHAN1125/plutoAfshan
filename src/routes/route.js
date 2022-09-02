@@ -1,33 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const userController= require("../controllers/userController")
+const CowinController= require("../controllers/cowinController")
 
-const commonMiddleware = require("../middleware/auth")
 
 router.get("/test-me", function (req, res) {
     res.send("My first ever api!")
 })
 
-try{
+router.get("/cowin/states", CowinController.getStates)
+router.get("/cowin/districtsInState/:stateId", CowinController.getDistricts)
+router.get("/cowin/getByPin", CowinController.getByPin)
 
-    router.post("/users", userController.createUser)
+router.post("/cowin/getOtp", CowinController.getOtp)
+router.get("/getDistrictSessions", CowinController.getDistrictSessions)
 
-   router.post("/login", userController.loginUser )
+// WRITE A GET API TO GET THE LIST OF ALL THE "vaccination sessions by district id" for any given district id and for any given date
 
-//The userIdis sent by front end
 
-router.get("/users/:userId", commonMiddleware.authenticate , commonMiddleware.authorise, userController.getUserData)       
-
-router.post("/users/:userId/posts", commonMiddleware.authenticate , commonMiddleware.authorise, userController.postMessage)       
-
-router.put("/users/:userId", commonMiddleware.authenticate , commonMiddleware.authorise, userController.updateUser)       
-
-router.delete("/users/:userId", commonMiddleware.authenticate , commonMiddleware.authorise, userController.deleteUser)       
-  
-}catch(err){
-    console.log("There is an error : " , err.message)
-    res.status(500).send({msg :"SERVER ERROR ", error :err.message})
-}
-
-  
 module.exports = router;
+

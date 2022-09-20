@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
         trim: true
     },
     email: {
-        type: Boolean,
+        type: String,
         default: false,
         unique: true
 
@@ -33,9 +33,9 @@ const userSchema = new mongoose.Schema({
         required:true
     },
     address:{
-        street: string,
-        city: String,
-        pincode: String
+        street: {type:String},
+        city: {type:String},
+        pincode: {type:String}
     },
     
 

@@ -1,4 +1,5 @@
 const userModel = require("../models/userModels");
+const JWT = require('jsonwebtoken')
 
 const {
   isValidName,
@@ -79,7 +80,7 @@ const registerUser = async function (req, res) {
 
     const isEmailAlreadyUsed = await userModel.findOne({ email });
 
-    if (isPhoneAlreadyUsed) {
+    if (isEmailAlreadyUsed) {
       return res
         .status(400)
         .send({ status: false, message: "email already exist" });
@@ -119,4 +120,51 @@ const registerUser = async function (req, res) {
   }
 };
 
-module.exports = { registerUser };
+
+
+
+
+const userLogin = async function (req, res) {
+  try {
+    let email = req.body.email
+    let password = req.body.password
+
+    if (!(email && password)) { return res.status(400).send({status:false, message:"Email and Password are Mandatory "}) }
+
+    if (!isValidEmail(email)) {
+      return res
+        .status(400)
+        .send({ status: false, message: "Enter a valid email" });
+    }
+
+   if (!isValidPassword(password)) {
+      return res
+        .status(400)
+        .send({ status: false, message: "Enter a valid password (min-8,max-15, contains atleast one num and symbol each, Have a mixuture of uppercase and lowercase letters)" });
+    }
+
+    let userDetail = await userModel.findOne({ email: email, password: password })
+    if (!userDetail) return res.status(400).send({ status: false, message: "Incorrect UserName or Password." })
+
+    let Payload = {
+      UserId: userDetail._id.toString(),
+      EmailID: userDetail.email,
+      Batch: "Plutonium",
+      Group: "3",
+      Project: "project-booksManagementementGroup3"
+    }
+    let token = JWT.sign(Payload, "keep-it-secret-tillThe-endOf-Course", { expiresIn: "1h" })
+
+    res.setHeader("x-api-key", token);
+    res.status(200).send({ status: true, message: "Success", data: { token } });
+
+  } catch (error) {
+
+    res.status(500).send({ status:false, message: error.message })
+
+  }
+
+}
+
+
+module.exports = { registerUser, userLogin };

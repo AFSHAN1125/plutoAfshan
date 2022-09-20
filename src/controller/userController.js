@@ -17,11 +17,12 @@ const registerUser = async function (req, res) {
     const { title, name, phone, email, password, address } = { ...data };
     const { street, city, pincode } = { ...address };
 
+    
     if (!title) {
       return res
-        .status(400)
+      .status(400)
         .send({ status: false, message: "title is required" });
-    }
+      }
 
     if (!name) {
       return res
@@ -31,60 +32,69 @@ const registerUser = async function (req, res) {
 
     if (!phone) {
       return res
-        .status(400)
-        .send({ status: false, message: "title is required" });
+      .status(400)
+      .send({ status: false, message: "title is required" });
     }
 
     if (!email) {
       return res
-        .status(400)
-        .send({ status: false, message: "title is required" });
+      .status(400)
+      .send({ status: false, message: "title is required" });
     }
-
+    
     if (!password) {
       return res
-        .status(400)
-        .send({ status: false, message: "title is required" });
+      .status(400)
+      .send({ status: false, message: "title is required" });
     }
-
+    
+    if (address) {
+      if(typeof address !== "object"){
+        return res
+          .status(400)
+          .send({ status: false, message: "address must be type object" });
+      }
+      
+    }
+    
     if (!isValidTitle(title)) {
       return res
-        .status(400)
-        .send({ status: false, message: "Enter a valid title" });
+      .status(400)
+      .send({ status: false, message: "Enter a valid title" });
     }
-
+    
     if (!isValidName(name)) {
       return res
         .status(400)
         .send({ status: false, message: "Enter a valid name" });
-    }
-
-    if (!isValidMobileNo(phone)) {
-      return res
+      }
+      
+      if (!isValidMobileNo(phone)) {
+        return res
         .status(400)
         .send({ status: false, message: "Enter a valid phone number" });
-    }
-
-    const isPhoneAlreadyUsed = await userModel.findOne({ phone });
-
-    if (isPhoneAlreadyUsed) {
-      return res
+      }
+      
+      const isPhoneAlreadyUsed = await userModel.findOne({ phone });
+      
+      if (isPhoneAlreadyUsed) {
+        return res
         .status(400)
         .send({ status: false, message: "phone already exist" });
-    }
-    if (!isValidEmail(email)) {
-      return res
+      }
+      if (!isValidEmail(email)) {
+        return res
         .status(400)
         .send({ status: false, message: "Enter a valid email" });
-    }
+      }
+      
+      const isEmailAlreadyUsed = await userModel.findOne({ email });
 
-    const isEmailAlreadyUsed = await userModel.findOne({ email });
-
-    if (isEmailAlreadyUsed) {
-      return res
+      if (isEmailAlreadyUsed) {
+        return res
         .status(400)
         .send({ status: false, message: "email already exist" });
-    }
+      }
 
     if (!isValidPassword(password)) {
       return res

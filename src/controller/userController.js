@@ -102,7 +102,7 @@ const registerUser = async function (req, res) {
         .send({ status: false, message: "Enter a valid password (min-8,max-15, contains atleast one num and symbol each, Have a mixuture of uppercase and lowercase letters)" });
     }
 
-    if (!isValidName(street)) {
+    if(address){if (!isValidName(street)) {
       return res
         .status(400)
         .send({ status: false, message: "Enter a valid street" });
@@ -118,7 +118,7 @@ const registerUser = async function (req, res) {
       return res
         .status(400)
         .send({ status: false, message: "Enter a valid pincode" });
-    }
+    }}
 
     const createUser = await userModel.create(data);
 

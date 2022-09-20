@@ -47,7 +47,7 @@ const registerUser = async function (req, res) {
       .status(400)
       .send({ status: false, message: "title is required" });
     }
-    
+
     if (address) {
       if(typeof address !== "object"){
         return res
@@ -111,7 +111,7 @@ const registerUser = async function (req, res) {
     if (!isValidName(city)) {
       return res
         .status(400)
-        .send({ status: false, message: "Enter a valid street" });
+        .send({ status: false, message: "Enter a valid city" });
     }
 
     if (!isValidPincode(pincode)) {

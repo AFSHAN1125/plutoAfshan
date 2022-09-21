@@ -1,6 +1,5 @@
 const userModel = require('../models/userModels');
-const bookModel = require('../models/bookModel');
-const bookModels = require('../models/bookModels');
+const bookModel = require('../models/userModels');
 
 const {
     isValidtitle,
@@ -33,7 +32,7 @@ const createBook = async function (req, res) {
                 .status(400)
                 .send({ status: false, message: "userId is required" });
         }
-        if (!ISBN {
+        if (!ISBN ){
             return res
                 .status(400)
                 .send({ status: false, message: "ISBN is required" });
@@ -54,6 +53,11 @@ const createBook = async function (req, res) {
                 .send({ status: false, message: "reviews is required" });
         }
         
+        let saveddata = await bookModel.create(data)
+        
+        return res.status(201).send({status: true, message:"success", data: saveddata})
+    }
+        
         catch (error) {
 
             res.status(500).send({ status:false, message: error.message })
@@ -61,4 +65,5 @@ const createBook = async function (req, res) {
           }
         
         };
-        module.exports.createBook = createBook
+
+        module.exports = {createBook}

@@ -12,7 +12,7 @@ const authentication = async function (req, res, next) {
 
         JWT.verify(token, "keep-it-secret-tillThe-endOf-Course", function (error, decodedToken) {
             if (error) {
-                return res.status(401).send({ status: false, message: "Invalid Token" })
+                 res.status(401).send({ status: false, message: "Invalid Token" })
             } else {
                 req.token = decodedToken
                 next()

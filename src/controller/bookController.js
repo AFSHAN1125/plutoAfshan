@@ -61,4 +61,47 @@ const createBook = async function (req, res) {
         
         };
 
-        module.exports = {createBook}
+
+
+
+
+        
+const getBooks = async function (req, res) {
+
+    try {
+        
+        let userId = req.query.userId
+        let category = req.query.category
+        let subcategory = req.query.subcategory
+
+        if(!(userId&&category||category&&subcategory||userId&&subcategory)){
+          return  res.status(400).send({status:false,message:"please provide any combination of userId,category and subacategory"})
+        }
+
+        let data=req.query
+
+        if (Object.keys(data).length == 0) {
+            return res.status(400).send({ status: false, message: "Please provide any Query Input" })
+        }
+
+        let obj={isDeleted:false,...data}
+
+        let books = await bookModel.find(obj).select('_id title excerpt userId category releasedAt reviews')
+        if (books.length==0) { return res.status(404).send({ status: false, message: "No Book Found" }) }
+
+        let booksData = books.sort(function (a, b) {
+            return a.title - b.title;
+        })
+
+        return res.status(200).send({ status: true, message: "Book List", data: booksData })
+
+
+
+    } catch (error) {
+
+        res.status(500).send({ status: false, message: error })
+    }
+
+}
+
+        module.exports = {createBook,getBooks}

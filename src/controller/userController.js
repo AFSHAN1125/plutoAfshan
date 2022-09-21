@@ -27,25 +27,25 @@ const registerUser = async function (req, res) {
     if (!name) {
       return res
         .status(400)
-        .send({ status: false, message: "title is required" });
+        .send({ status: false, message: "name is required" });
     }
 
     if (!phone) {
       return res
       .status(400)
-      .send({ status: false, message: "title is required" });
+      .send({ status: false, message: "phone is required" });
     }
 
     if (!email) {
       return res
       .status(400)
-      .send({ status: false, message: "title is required" });
+      .send({ status: false, message: "email is required" });
     }
     
     if (!password) {
       return res
       .status(400)
-      .send({ status: false, message: "title is required" });
+      .send({ status: false, message: "password is required" });
     }
 
     if (address) {

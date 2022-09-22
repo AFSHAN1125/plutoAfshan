@@ -80,7 +80,7 @@ const createBook = async function (req, res) {
         .send({ status: false, message: "Enter valid userId" });
     }
     
-    const isValidUser = await userModel.findOne({ userId });
+    const isValidUser = await userModel.findOne({_id: userId });
     
     if (!isValidUser) {
         return res
@@ -144,6 +144,9 @@ const createBook = async function (req, res) {
   }
 };
 
+
+
+
 //////////=============================================== fetching book details by query ===========================================================/////////////
 
 const getBooks = async function (req, res) {
@@ -185,6 +188,10 @@ const getBooks = async function (req, res) {
     return res.status(500).send({ status: false, message: error });
   }
 };
+
+
+
+
 
 ////===================================================  fetching book details by params (bookId)  ========================================================//////
 

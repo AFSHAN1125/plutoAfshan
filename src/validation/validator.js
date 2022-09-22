@@ -43,6 +43,13 @@ const isValidDate = function (date) {
   return nameRegex.test(date);
 };
 
+const isValidRating = function (rating) {
+  const nameRegex = /^[1-5]+$/;
+  return nameRegex.test(rating);
+};
+
+
+
 module.exports = {
   isValidName,
   isValidEmail,
@@ -52,5 +59,6 @@ module.exports = {
   isValidPincode,
   isValidISBN,
   isValidReviews,
-  isValidDate
+  isValidDate,
+  isValidRating
 };

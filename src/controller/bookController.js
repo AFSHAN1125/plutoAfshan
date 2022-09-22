@@ -9,7 +9,7 @@ const {
   isValidReviews,
   isValidDate
 } = require("../validation/validator");
-const { findByIdAndUpdate } = require("../models/userModels");
+
 
 ///////==================================================  Creating Book =================================================================/////////
 const createBook = async function (req, res) {
@@ -222,7 +222,7 @@ const getBooksParams = async function (req, res) {
     const reviewData = await reviewModel.find({
       bookId: bookId,
       isDeleted: false,
-    });
+    }).select({isDeleted:0, createdAt:0, updatedAt:0, __v:0});
 
     let data = { ...bookDetails, review: reviewData };
 

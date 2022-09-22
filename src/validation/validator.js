@@ -1,14 +1,13 @@
+
+
 const isValidName = function (body) {
   const nameRegex = /^[a-zA-Z_ ]*$/;
-
   return nameRegex.test(body);
 };
 
 const isValidEmail = function (email) {
   return /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(email);
 };
-
-
 
 const isValidMobileNo = function (mobile) {
   return /^[6-9]\d{9}$/.test(mobile);
@@ -19,8 +18,8 @@ const isValidTitle = function (title) {
 };
 
 const isValidPassword = function (Password) {
-  const passRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$/
-  ;
+  const passRegex =
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$/;
   return passRegex.test(Password);
 };
 
@@ -35,5 +34,5 @@ module.exports = {
   isValidMobileNo,
   isValidTitle,
   isValidPassword,
-  isValidPincode
+  isValidPincode,
 };

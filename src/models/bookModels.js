@@ -1,9 +1,6 @@
-//---------------------------------------importing modules--------------------------------------------
 const mongoose = require("mongoose")
 const ObjectId = mongoose.Schema.Types.ObjectId
 
-
-//----------------------------------------Creating Schema---------------------------------------------
 
 const bookSchema = new mongoose.Schema({
 
@@ -32,7 +29,7 @@ const bookSchema = new mongoose.Schema({
         required: true,
     },
     subcategory: {
-        type: [String],
+        type: String,
         required: true,
     },
     reviews: {
@@ -50,6 +47,7 @@ const bookSchema = new mongoose.Schema({
 
     releasedAt: {
         type: Date,
+        format: "YYYY-MM-DD",
         required: true,
     },
 }, { timestamps: true });

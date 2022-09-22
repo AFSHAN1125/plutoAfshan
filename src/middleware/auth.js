@@ -1,8 +1,4 @@
-
-
 const JWT = require("jsonwebtoken")
-
-
 
 
 const authentication = async function (req, res, next) {
@@ -12,7 +8,7 @@ const authentication = async function (req, res, next) {
 
         JWT.verify(token, "keep-it-secret-tillThe-endOf-Course", function (error, decodedToken) {
             if (error) {
-                 res.status(401).send({ status: false, message: "Invalid Token" })
+                 res.status(401).send({ status: false, message: "Unauthenticated access (Invalid Token)" })
             } else {
                 req.token = decodedToken
                 next()

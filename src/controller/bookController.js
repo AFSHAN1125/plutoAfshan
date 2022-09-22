@@ -4,20 +4,17 @@ const reviewModel = require("../models/reviewModel");
 const mongoose = require("mongoose");
 
 const {
-  isValidtitle,
-  isValidexcerpt,
-  isValiduserId,
+  isValidName,
   isValidISBN,
-  isValidcategory,
-  isValidsubCategory,
-  isValidreviews,
+  isValidReviews,
+  isValidDate
 } = require("../validation/validator");
 
 ///////==================================================  Creating Book =================================================================/////////
 const createBook = async function (req, res) {
   try {
     let data = req.body;
-    let { title, excerpt, userId, ISBN, category, subcategory } = data;
+    let { title, excerpt, userId, ISBN, category, subcategory, reviews , releasedAt, deletedAt } = data;
 
     if (!title) {
       return res
@@ -49,20 +46,103 @@ const createBook = async function (req, res) {
         .status(400)
         .send({ status: false, message: "subCategory is required" });
     }
+    if (!releasedAt) {
+      return res
+        .status(400)
+        .send({ status: false, message: "releasedAt is required" });
+    }
 
+    //------type validation----//
 
+    if (!isValidName(title)) {
+      return res
+        .status(400)
+        .send({ status: false, message: "Enter valid title" });
+    }
+
+    const isTitleAlreadyUsed = await bookModel.findOne({ title });
+
+    if (isTitleAlreadyUsed) {
+      return res
+        .status(400)
+        .send({ status: false, message: `title is already registered` });
+    }
+    
+    if (!isValidName(excerpt)) {
+        return res
+        .status(400)
+        .send({ status: false, message: "Enter valid excerpt" });
+    }
+    
+    if (!mongoose.isValidObjectId(userId)) {
+        return res
+        .status(400)
+        .send({ status: false, message: "Enter valid userId" });
+    }
+    
+    const isValidUser = await userModel.findOne({ userId });
+    
+    if (!isValidUser) {
+        return res
+        .status(400)
+        .send({ status: false, message: `User not exist` });
+    }
+    
+    if (!isValidISBN(ISBN)) {
+        return res
+        .status(400)
+        .send({ status: false, message: "Enter valid ISBN" });
+    }
+    
+    const isIsbnAlreadyUsed = await bookModel.findOne({ ISBN });
+    
+    if (isIsbnAlreadyUsed) {
+        return res
+        .status(400)
+        .send({ status: false, message: `ISBN is already registered` });
+    }
+    
+    if (!isValidName(category)) {
+        return res
+        .status(400)
+        .send({ status: false, message: "Enter valid category" });
+    }
+
+    if (!isValidName(subcategory)) {
+        return res
+        .status(400)
+        .send({ status: false, message: "Enter valid subcategory" });
+    }
+    
+    if (!isValidDate(releasedAt)) {
+        return res
+        .status(400)
+        .send({ status: false, message: "Enter valid releasedAt" });
+    }
+
+    //-------- extra----------//
+    if(reviews){if (!isValidReviews(reviews)) {
+        return res
+        .status(400)
+        .send({ status: false, message: "Enter valid reviews" });
+    }}
+    
+    if(deletedAt){if (!isValidDate(deletedAt)) {
+        return res
+        .status(400)
+        .send({ status: false, message: "Enter valid deletedAt" });
+    }}
+
+    
     let saveddata = await bookModel.create(data);
-
+    
     return res
-      .status(201)
+    .status(201)
       .send({ status: true, message: "success", data: saveddata });
   } catch (error) {
     res.status(500).send({ status: false, message: error.message });
   }
 };
-
-
-
 
 //////////=============================================== fetching book details by query ===========================================================/////////////
 
@@ -105,8 +185,6 @@ const getBooks = async function (req, res) {
     return res.status(500).send({ status: false, message: error });
   }
 };
-
-
 
 ////===================================================  fetching book details by params (bookId)  ========================================================//////
 

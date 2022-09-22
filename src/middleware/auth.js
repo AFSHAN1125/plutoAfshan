@@ -1,4 +1,5 @@
 const JWT = require("jsonwebtoken")
+const bookModel = require("../models/bookModels");
 
 
 const authentication = async function (req, res, next) {
@@ -22,4 +23,29 @@ const authentication = async function (req, res, next) {
 
 }
 
-module.exports = { authentication }
+
+const Authorisation = async function (req, res, next) {
+    try {
+
+    
+        let bookId = req.params.bookId;
+
+        let bookD = await bookModel.findOne({ _id: bookId, isDeleted: false })
+        if (!bookD) {
+            return res.status(404).send({ status: false, message: `Book not exist` })
+        }
+
+        if (bookD.userId.toString() !== req.token.UserId) {
+            return res.status(403).send({ status: false, message: `Unauthorized access!` });
+        }
+
+        next()
+
+    } catch (error) {
+
+        res.status(500).send({ status: false, msg: error.message })
+    }
+
+}
+
+module.exports = { authentication,Authorisation }

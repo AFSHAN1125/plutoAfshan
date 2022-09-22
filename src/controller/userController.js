@@ -163,7 +163,7 @@ const userLogin = async function (req, res) {
       Group: "3",
       Project: "project-booksManagementementGroup3"
     }
-    let token = JWT.sign(Payload, "keep-it-secret-tillThe-endOf-Course", { expiresIn: "1h" })
+    let token = JWT.sign(Payload, "keep-it-secret-tillThe-endOf-Course", { expiresIn: "1d" })
 
     res.setHeader("x-api-key", token);
     res.status(200).send({ status: true, message: "Success", data: { token } });

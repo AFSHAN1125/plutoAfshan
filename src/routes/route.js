@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const {registerUser,userLogin} = require("../controller/userController")
-const {createBook,getBooks, getBooksParams, updateBook} = require("../controller/bookController")
-const{authentication}=require("../middleware/auth")
+const {createBook,getBooks, getBooksParams, updateBook,deletbook} = require("../controller/bookController")
+const{authentication,Authorisation}=require("../middleware/auth")
 
 router.post("/register", registerUser)
 
@@ -14,6 +14,8 @@ router.get("/books",authentication,getBooks)
 
 router.get("/books/:bookId",authentication, getBooksParams )
 
-router.put("/books/:bookId",authentication, updateBook )
+router.put("/books/:bookId",authentication,Authorisation, updateBook )
+
+router.delete("/books/:bookId",authentication,Authorisation, deletbook )
 
 module.exports = router

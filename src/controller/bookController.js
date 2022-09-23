@@ -241,8 +241,7 @@ const updateBook = async function (req, res) {
   try {
 
     let bookId = req.params.bookId
-    let data = req.body
-    let { title, excerpt, releasedAt, ISBN } = data
+    let { title, excerpt, releasedAt, ISBN } = req.body
 
     if (!mongoose.isValidObjectId(req.params.bookId)) {
       return res

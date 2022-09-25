@@ -161,11 +161,6 @@ const getBooks = async function (req, res) {
   try {
     let data = req.query;
 
-    if (Object.keys(data).length == 0) {
-      return res
-        .status(400)
-        .send({ status: false, message: "Please provide any Query Input" });
-    }
 
     if (req.query.userId) {
       if (!mongoose.isValidObjectId(req.query.userId)) {

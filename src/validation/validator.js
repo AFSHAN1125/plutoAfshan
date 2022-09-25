@@ -1,12 +1,17 @@
 
 
 const isValidName = function (body) {
-  const nameRegex = /^[a-zA-Z_ ]*$/;
+  const nameRegex = /^[a-zA-Z_!@#$%^&*()_+?"|:<>/.,;'} ]*$/;
+  return nameRegex.test(body);
+};
+
+const isValidStreet = function (body) {
+  const nameRegex = /^[a-zA-Z0-9_ ]*$/;
   return nameRegex.test(body);
 };
 
 const isValidEmail = function (email) {
-  return /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(email);
+  return /^[a-z0-9._+~!@#$%^&:;"',<.>?/}{*()]+@[a-z-]+\.[a-z-.]+$/.test(email);
 };
 
 const isValidMobileNo = function (mobile) {
@@ -29,7 +34,7 @@ const isValidPincode = function (Pincode) {
 };
 
 const isValidISBN = function (ISBN) {
-  const passRegex = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
+  const passRegex = /^(?=(?:\D*\d){13}(?:(?:\D*\d){3})?$)[\d-]+$/;
   return passRegex.test(ISBN);
 };
 
@@ -60,5 +65,6 @@ module.exports = {
   isValidISBN,
   isValidReviews,
   isValidDate,
-  isValidRating
+  isValidRating,
+  isValidStreet
 };

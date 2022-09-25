@@ -1,5 +1,7 @@
 const JWT = require("jsonwebtoken")
 const bookModel = require("../models/bookModels");
+const mongoose = require("mongoose");
+
 
 
 const authentication = async function (req, res, next) {
@@ -29,6 +31,19 @@ const Authorisation = async function (req, res, next) {
 
     
         let bookId = req.params.bookId;
+
+        if (!bookId) {
+            return res
+              .status(400)
+              .send({ status: false, message: "please provide bookId" });
+          }
+    
+
+        if (!mongoose.isValidObjectId(bookId)) {
+            return res
+              .status(400)
+              .send({ status: false, message: "Enter valid bookId" });
+          }
 
         let bookD = await bookModel.findOne({ _id: bookId, isDeleted: false })
         if (!bookD) {

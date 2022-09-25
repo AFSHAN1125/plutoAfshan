@@ -9,7 +9,7 @@ router.post("/register", registerUser)
 
 router.post("/login", userLogin)
 
-router.post("/createBook",authentication,createBook)
+router.post("/books",authentication,createBook)
 
 router.get("/books",authentication,getBooks)
 

@@ -102,7 +102,7 @@ const createBook = async function (req, res) {
         .send({ status: false, message: "Enter valid ISBN" });
     }
 
-    const isIsbnAlreadyUsed = await bookModel.findOne({ ISBN });
+    const isIsbnAlreadyUsed = await bookModel.findOne({ ISBN: INBN });
 
     if (isIsbnAlreadyUsed) {
       return res
@@ -181,7 +181,6 @@ const getBooks = async function (req, res) {
     }
 
     let booksData = books.sort(function (a, b) {
-      // return a.title - b.title;
       return a.title.localeCompare(b.title);
     });
 
@@ -269,17 +268,17 @@ const getBooksParams = async function (req, res) {
         .send({ status: false, message: `title is already registered` });
       }
       
-      if (!isValidName(excerpt)) {
+      if(excerpt){if (!isValidName(excerpt)) {
         return res
         .status(400)
         .send({ status: false, message: "Enter valid excerpt" });
-      }
+      }}
 
-    if (!isValidISBN(ISBN)) {
+    if(ISBN){if (!isValidISBN(ISBN)) {
       return res
       .status(400)
       .send({ status: false, message: "Enter valid ISBN" });
-    }
+    }}
     
     const isIsbnAlreadyUsed = await bookModel.findOne({ ISBN , isDeleted: false });
     
